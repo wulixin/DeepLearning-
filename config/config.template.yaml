@@ -1,0 +1,113 @@
+# A股市场风险监控系统配置模板
+# 请复制为 config.yaml 并根据需要修改
+
+# 数据源配置
+data_source:
+  # 数据提供方: eastmoney(东方财富), sina(新浪财经)
+  provider: "eastmoney"
+
+  # 数据缓存时间(秒)
+  cache_ttl: 300
+
+  # 重试次数
+  max_retries: 3
+
+  # 超时时间(秒)
+  timeout: 10
+
+# 成交量阈值配置(单位: 万亿)
+strategy:
+  # 档位阈值
+  volume_thresholds:
+    level_5: 3.0      # ≥3万亿: 全场热
+    level_4: 2.5      # 2.5~3万亿: 热度还行
+    level_3: 2.0      # 2.0~2.5万亿: 开始磨叽
+    level_2: 1.5      # 1.5~2.0万亿: 情绪凉了
+    level_1: 0        # <1.5万亿: 冰点期
+
+  # 风险控制参数
+  risk_control:
+    # 连续缩量警戒天数
+    shrink_warning_days: 3
+    shrink_critical_days: 5
+
+    # 止损线
+    total_loss_limit: 0.10      # 总亏损10%强制空仓
+    single_loss_limit: 0.08     # 单只亏损8%止损
+
+    # 单次开仓最大亏损
+    single_trade_loss_limit: 0.02
+
+  # 观察周期
+  observation_period: 7  # 天
+
+# 通知配置
+notification:
+  # 是否启用通知
+  enabled: true
+
+  # 通知渠道: console(控制台), log(日志), webhook, email
+  channels:
+    - console
+    - log
+
+  # Webhook配置(可选)
+  webhook:
+    enabled: false
+    url: ""  # 例如: 企业微信、钉钉webhook地址
+    token: ""
+
+  # 邮件配置(可选)
+  email:
+    enabled: false
+    smtp_server: ""
+    smtp_port: 587
+    username: ""
+    password: ""
+    from_addr: ""
+    to_addrs: []
+
+  # 通知时机
+  notify_on:
+    position_change: true      # 仓位建议变化
+    risk_warning: true         # 风险预警
+    daily_summary: true        # 每日汇总
+
+# 数据存储配置
+storage:
+  # 数据文件路径
+  data_file: "data/daily_records.csv"
+
+  # 日志文件路径
+  log_dir: "logs"
+
+  # 日志级别: DEBUG, INFO, WARNING, ERROR
+  log_level: "INFO"
+
+  # 数据保留天数
+  retention_days: 365
+
+# 定时任务配置
+schedule:
+  # 是否启用定时任务
+  enabled: false
+
+  # 执行时间(24小时制)
+  time: "15:05"  # 每天下午3:05执行
+
+  # 时区
+  timezone: "Asia/Shanghai"
+
+# 可视化配置
+visualization:
+  # 是否生成图表
+  enabled: true
+
+  # 图表保存路径
+  output_dir: "data/charts"
+
+  # 图表格式: png, html
+  format: "html"
+
+  # 图表主题
+  theme: "plotly_white"
