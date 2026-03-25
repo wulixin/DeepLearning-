@@ -1,5 +1,3 @@
-# DeepLearning-
-My notes of learning deep learning framework and practice .
 # A股市场风险监控智能持仓策略提醒系统
 # A-Share Market Risk Monitoring & Position Strategy Alert System
 
